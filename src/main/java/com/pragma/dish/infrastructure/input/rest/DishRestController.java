@@ -1,6 +1,7 @@
 package com.pragma.dish.infrastructure.input.rest;
 
 import com.pragma.dish.application.dto.request.DishRequestDto;
+import com.pragma.dish.application.dto.request.DishUpdateRequestDto;
 import com.pragma.dish.application.dto.response.DishResponseDto;
 import com.pragma.dish.application.handler.IDishHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,11 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -50,4 +47,17 @@ public class DishRestController {
         return ResponseEntity.ok(dishHandler.getAllDishes());
     }
 
+    @Operation(summary = "Update Dishes")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All dishes update"),
+            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+    })
+    @PutMapping("/{dishId}")
+    public ResponseEntity<Void> updateDishes( @PathVariable Long dishId,
+                                              @RequestParam Long ownerId,
+                                              @RequestBody DishUpdateRequestDto request) {
+
+        dishHandler.updateDish(dishId, ownerId, request);
+        return ResponseEntity.noContent().build();
+    }
 }

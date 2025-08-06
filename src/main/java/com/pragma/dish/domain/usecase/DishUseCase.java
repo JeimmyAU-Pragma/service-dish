@@ -1,15 +1,13 @@
 package com.pragma.dish.domain.usecase;
 
-import com.pragma.dish.application.dto.external.RestaurantResponseDto;
+import com.pragma.dish.application.dto.request.DishUpdateRequestDto;
 import com.pragma.dish.domain.api.IDishServicePort;
 import com.pragma.dish.domain.exception.DomainException;
 import com.pragma.dish.domain.model.DishModel;
 import com.pragma.dish.domain.spi.IDishPersistencePort;
 import com.pragma.dish.domain.spi.IRestaurantFeignPort;
-import com.pragma.dish.infrastructure.exception.NoDataFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 public class DishUseCase implements IDishServicePort {
 
@@ -65,6 +63,26 @@ public class DishUseCase implements IDishServicePort {
     @Override
     public List<DishModel> getAllDishes() {
         return dishPersistencePort.getAllDishes();
+    }
+
+    @Override
+    public DishModel getDishById(Long dishId) {
+        return dishPersistencePort.getDishById(dishId);
+    }
+
+    @Override
+    public void updateDish(Long dishId, Long ownerId, DishUpdateRequestDto request) {
+        DishModel dish = dishPersistencePort.getDishById(dishId);
+
+        boolean isOwner = restaurantFeignPort.isOwner(dish.getIdRestaurant(),dish.getIdOwner());
+        if (!isOwner) {
+            throw new DomainException("Only the owner can modify the dish.");
+        }
+
+        dish.setPrice(request.getPrice());
+        dish.setDescription(request.getDescription());
+
+        dishPersistencePort.updateDish(dish);
     }
 
 }
