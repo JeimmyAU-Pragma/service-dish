@@ -10,5 +10,7 @@ public interface IDishPersistencePort {
     List<DishModel> getAllDishes();
 
     DishModel getDishById(Long dishId);
-    void updateDish(Long dishId, Long ownerId, Long price, String description);
+
+    void updateDish(DishModel dishId);
+
 }

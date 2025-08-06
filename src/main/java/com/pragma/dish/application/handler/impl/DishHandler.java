@@ -1,6 +1,7 @@
 package com.pragma.dish.application.handler.impl;
 
 import com.pragma.dish.application.dto.request.DishRequestDto;
+import com.pragma.dish.application.dto.request.DishUpdateRequestDto;
 import com.pragma.dish.application.dto.response.DishResponseDto;
 import com.pragma.dish.application.handler.IDishHandler;
 import com.pragma.dish.application.mapper.IDishRequestMapper;
@@ -35,5 +36,17 @@ public class DishHandler implements IDishHandler {
     public List<DishResponseDto> getAllDishes() {
         return dishResponseMapper.toResponseList(dishServicePort.getAllDishes());
     }
+
+ /*   @Override
+    public DishResponseDto getDishById(Long dishId) {
+        DishModel dishModel = dishServicePort.getDishById(dishId);
+        return dishResponseMapper.toResponse(dishModel);
+    }*/
+
+    @Override
+    public void updateDish(Long dishId, Long ownerId, DishUpdateRequestDto request) {
+        dishServicePort.updateDish(dishId, ownerId, request);
+    }
+
 
 }

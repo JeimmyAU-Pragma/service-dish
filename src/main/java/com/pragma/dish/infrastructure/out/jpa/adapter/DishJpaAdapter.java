@@ -9,6 +9,7 @@ import com.pragma.dish.infrastructure.out.jpa.repository.IDishRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class DishJpaAdapter implements IDishPersistencePort {
@@ -30,4 +31,17 @@ public class DishJpaAdapter implements IDishPersistencePort {
         }
         return dishEntityMapper.toDishList(entityList);
     }
+
+    @Override
+    public DishModel getDishById(Long dishId) {
+        Optional<DishEntity> userEntity = dishRepository.findById(dishId);
+        return dishEntityMapper.toDish(userEntity.orElse(null));
+    }
+
+    @Override
+    public void updateDish(DishModel dishModel) {
+        DishEntity dishEntity = dishEntityMapper.toEntity(dishModel);
+        dishRepository.save(dishEntity);
+    }
+
 }

@@ -14,5 +14,5 @@ public class DishResponseDto {
     private String category;
     private Boolean active;
     private Long idRestaurant;
-    //private Long idOwner;
+    private Long idOwner;
 }
